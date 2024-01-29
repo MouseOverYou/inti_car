@@ -1,0 +1,516 @@
+
+//OLD STUFFFFFFF
+/*
+jQuery(document).ready(function ($) {
+
+  //COLOUR COATING
+  $('.colourOption').on('click', function () {
+    var colorValue = rgb2hex(getComputedStyle(this).backgroundColor)
+    console.log(colorValue)
+    coatMat.albedoColor = new BABYLON.Color3.FromHexString(colorValue)
+    $('#colourPicker *').removeClass('selectedColour');
+    $(this).toggleClass('selectedColour');
+  });
+
+  //ENVIRONMENT
+  $('.envOption').on('click', function () {
+    console.log(this.id);
+    var envSelec = this.id
+    switch (envSelec) {
+      case "envOne":
+        changeEnv(hdrTexture, 1)
+        break;
+      case "envTwo":
+        changeEnv(hdrTextureCity, 1)
+        break;
+      case "envThree":
+        changeEnv(hdrTextureStudio, 0)
+        break;
+    }
+
+    /* Remove all classes selectedColour from all child elements*/
+    $('#envPicker *').removeClass('selectedEnv');
+    /* This switches on the selectedColour class for that div. */
+    $(this).toggleClass('selectedEnv');
+  });
+
+  //Wheels
+  $('.wheelOption').on('click', function () {
+    //set out mat:
+    wheelMatOut.albedoTexture = wheelMatIn.albedoTexture
+    wheelMatOut.metallicTexture = wheelMatIn.albedoTexture
+
+    wheelAnimOut.restart()
+
+    console.log(this.id);
+    var wheelSelec = this.id
+    window.setTimeout(() => {
+      switch (wheelSelec) {
+        case "wheelOne":
+          wheelMatIn.albedoTexture = wheelAlbedo[0]
+          wheelMatIn.metallicTexture = wheelMetal[0]
+          //alert("wheel 1")
+          break;
+        case "wheelTwo":
+          wheelMatIn.albedoTexture = wheelMatIn.ambientTexture
+          wheelMatIn.metallicTexture = wheelMetal[1]
+          //alert("wheel 2")
+          break;
+        case "wheelThree":
+          wheelMatIn.albedoTexture = wheelAlbedo[2]
+          wheelMatIn.metallicTexture = wheelMetal[1]
+          //alert("wheel 3")
+          break;
+        case "wheelFour":
+          wheelMatIn.albedoTexture = wheelAlbedo[3]
+          wheelMatIn.metallicTexture = wheelMetal[1]
+          //alert("wheel 4")
+          break;
+      }
+
+    }, (10 / 25) * 1000)
+
+
+    /* Remove all classes selectedColour from all child elements*/
+    $('#wheelPicker *').removeClass('selectedWheel');
+    /* This switches on the selectedColour class for that div. */
+    $(this).toggleClass('selectedWheel');
+  });
+
+
+  //LIGHTSWITCHER
+  $('.lightOption').on('click', function () {
+
+    LightSwitchOn = !LightSwitchOn
+    if (LightSwitchOn) {
+      $('#lightPicker *').addClass('lightOn');
+      UpdateAnimRate = true
+    }
+    else {
+      $('#lightPicker *').removeClass('lightOn');
+      TurnLightsOff()
+
+    }
+
+  });
+
+});
+
+
+
+
+var lightIcon = 'brightness_5'
+var colorIcon = 'brightness_1'
+var envIcon = 'filter_'
+var wheel = 'looks_'
+
+
+for (var i = 0; i < allOptions.length; i++) {
+  allOptions[i].addEventListener('click', optionsCliked)
+}
+
+var oldOption1 = 'initialState'
+var oldOption2 = 'initialState'
+var oldOption3 = 'initialState'
+var newOption = undefined
+
+function optionsCliked() {
+
+  //handle selected option class
+  newOption = this
+  var newId = this.id.slice(3, 4)
+  console.log('option id is ' + newId)
+  console.log('submenu id is ' + subMenuId)
+
+  //TO DOOOOO!
+
+  //handle ID
+  if (subMenuId == 0) {
+    this.classList.toggle('selected')
+  }
+
+  else if (subMenuId == 1) {
+    if (oldOption1 != 'initialState') {
+      oldOption1.classList.toggle('selected')
+    }
+    this.classList.toggle('selected')
+    oldOption1 = this
+  }
+
+  else if (subMenuId == 2) {
+    if (oldOption2 != 'initialState') {
+      oldOption2.classList.toggle('selected')
+    }
+    this.classList.toggle('selected')
+    oldOption2 = this
+  }
+
+}
+
+var oldSubMenu = 'initialState'
+var newSubMenu = undefined
+
+//Menu calls
+function menuClick() {
+  menuIcon.classList.toggle('open')
+  let stagger = 0;
+  for (let i = 1; i < allSubMenus.length; i++) {
+    stagger += 50
+    window.setTimeout(() => {
+      allSubMenus[i].classList.toggle('open')
+      allSubMenus[i].classList.remove('selected')
+    }, stagger)
+  }
+  //reset submenus state
+  oldSubMenu = 'initialState'
+  newSubMenu = undefined
+  foldOptions()
+}
+//var menuIcon = document.querySelector('#ham2')
+var buttons = document.querySelector('#UIHolder')
+//menuIcon.addEventListener('click', menuClick)
+
+window.onload = function () {
+}
+
+//Submenu Call
+
+var subMenuId, newLength
+async function submenusCliked() {
+
+  //handle selected option class
+  newSubMenu = this
+  subMenuId = this.id.slice(3, 4)
+  newLength = this.id.slice(-1)
+
+  //SAME CLICKED
+  if (newSubMenu == oldSubMenu) {
+
+    this.classList.toggle('selected')
+    oldSubMenu = 'initialState'
+    //console.log('//SAME CLICKED')
+
+    //FOLD
+    await foldOptions()
+  }
+
+  //FIRST CLICKED
+  else if (oldSubMenu == 'initialState') {
+
+    this.classList.toggle('selected')
+    oldSubMenu = this
+    //console.log('FIRST CLICKED')
+    ///UNFOLD
+    await HandleOptions(subMenuId, newLength)
+  }
+  //DIFFERENT CLICKED
+  else {
+
+    this.classList.toggle('selected')
+    oldSubMenu.classList.toggle('selected')
+    oldSubMenu = this
+    //console.log('DIFFERENT CLICKED')
+    //UNFOLD
+    await HandleOptions(subMenuId, newLength)
+  }
+
+
+}
+
+async function foldOptions() {
+  for (let i = 0; i < allOptions.length; i++) {
+    allOptions[i].classList.remove('open')
+  }
+}
+
+async function unfoldOptions(options, newSubMenuLength) {
+  let stagger = 0;
+  for (let i = 0; i <= newSubMenuLength; i++) {
+    stagger += 50
+
+    window.setTimeout(() => {
+      allOptions[i].classList.add('open')
+    }, stagger)
+  }
+}
+
+async function HandleOptions(newId, newLength) {
+  await foldOptions()
+  //remove options
+  await wait(250)
+  removeAllChildren()
+  //addOptions
+  await feedOptions(newId, newLength)
+
+  await unfoldOptions(newId, newLength)
+
+}
+async function feedOptions(newId, len) {
+
+  var icon = '<i class="material-icons">offline_bolt</i>'
+
+  for (var i = 0; i <= len; i++) {
+
+    var para = document.createElement("i");
+    para.classList.add('material-icons')
+    para.setAttribute('style', 'color: ' + optionsColors[newId][i] + '');
+    para.innerHTML = optionsIcons[newId][i]
+    allOptions[i].appendChild(para)
+  }
+}
+
+function removeAllChildren() {
+  for (var i = 0; i <= 5; i++) {
+
+    allOptions[i].textContent = ''
+  }
+}
+
+
+*/
+//SHOW CLICKED ELEMENT
+document.addEventListener('click', function (e) {
+  e = e || window.event;
+  console.log(e.target);
+}, false);
+
+//WAIT
+async function wait(ms) {
+  return new Promise(resolve => {
+    setTimeout(resolve, ms);
+  });
+}
+
+HTML!!!!
+    <!-- UI-->
+    <div id='UIHolder'>
+        <div>
+            <div id='colourPicker'>
+                <div id='colourOne' class='colourOption'></div>
+                <div id='colourTwo' class='colourOption'></div>
+                <div id='colourThree' class='colourOption'></div>
+                <div id='colourFour' class='colourOption'></div>
+                <div id='colourFive' class='colourOption'></div>
+                <div id='colourSix' class='colourOption'></div>
+            </div>
+            <div id='envPicker'>
+                <div id='envOne' class='envOption selectedEnv'></div>
+                <div id='envTwo' class='envOption'></div>
+                <div id='envThree' class='envOption'></div>
+            </div>
+            <div id='lightPicker'>
+                <div class='lightOption'></div>
+            </div>
+        </div>
+        <div>
+            <div id='wheelPicker'>
+                <div id='wheelOne' class='wheelOption selectedWheel'></div>
+                <div id='wheelTwo' class='wheelOption'></div>
+                <div id='wheelThree' class='wheelOption'></div>
+                <div id='wheelFour' class='wheelOption'></div>
+            </div>
+        </div>
+    </div>
+
+    CSS!!!!!!!!!!!!!
+
+    
+/*UI STUFF*/
+/*Colour Picker*/
+#UIHolder {
+	pointer-events: none;
+	position: absolute;
+	display: flex;
+	left: -100px;
+	opacity: 0;
+
+	-webkit-transition: .25s ease-in-out;
+	-moz-transition: .25s ease-in-out;
+	-o-transition: .25s ease-in-out;
+	transition: .25s ease-in-out;
+}
+
+#UIHolder.open {
+	left:0px;
+	opacity: 1;
+
+}
+#colourPicker {
+  margin-left:auto;
+  margin-right:auto;
+  	    width: 10vh;
+		  /*width: 1000px;*/
+  /*change width*/
+	border-style: solid;
+	border-width: 0.4vh;
+	border-color: #2C3E50;
+  background-color:#2C3E50;
+}
+/*only div elements which parent are #cikiurPicker*/
+#colourPicker div {
+  display: block;
+  /*display: inline-block;*/
+  /*change display*/
+	margin: 1vh;
+	width: 2vh;
+	height: 6vh;
+	border-style: solid;
+  	cursor:none;
+	-webkit-transition: border-width .5s ease;
+	-moz-transition: border-width .5s ease;
+	-ms-transition: border-width .5s ease;
+	-o-transition: border-width .5s ease;
+	transition: border-width .5s ease;
+}
+.colourOption{
+  	border-width: 0 6vh 0 0;
+}
+#colourOne {
+	background-color: #000000;
+  border-color: #34495E;
+  
+}
+#colourTwo {
+	background-color: #b700ff;
+	border-color: #34495E;
+}
+#colourThree {
+	background-color: #00ff6a;
+	border-color: #34495E;
+}
+#colourFour {
+	background-color: #ff1900;
+	border-color: #34495E;
+}
+#colourFive {
+	background-color: #f4a700;
+	border-color: #34495E;
+}
+#colourSix {
+	background-color: #a89990;
+	border-color: #34495E;
+}
+
+.selectedColour {
+	border-width: 0 0 0 6vh;
+}
+
+/*Env Picker*/
+#envPicker {
+	margin-left:auto;
+	margin-right:auto;
+	width: 10vh;
+	  border-style: solid;
+	  border-width: 0.4vh;
+	  border-color: #2C3E50;
+	background-color:#2C3E50;
+  }
+  #envPicker div {
+	  display: block;
+		cursor:none;
+	  -webkit-transition: .25s ease;
+	  -moz-transition: .25s ease;
+	  -ms-transition: .25s ease;
+	  -o-transition: .25s ease;
+	  transition:  .25s ease;
+  }
+  .envOption{
+		margin: 3vh;
+		width: 4vh;
+		height: 4vh;
+  }
+  #envOne {
+	  background-color: rgb(0, 0, 0);
+  }
+  #envTwo {
+	  background-color: rgb(126, 126, 126);
+  }
+  #envThree {
+	  background-color: rgb(255, 255, 255);
+  }
+
+  .selectedEnv {
+	margin: 1vh;
+	width: 8vh;
+	height: 8vh;
+  }
+
+  /*Wheel Picker*/
+#wheelPicker {
+	margin-left:auto;
+	margin-right:auto;
+	width: 10vh;
+	  border-style: solid;
+	  border-width: 0.4vh;
+	  border-color: #2C3E50;
+	background-color:#2C3E50;
+  }
+  #wheelPicker div {
+	  display: block;
+		cursor:none;
+	  -webkit-transition: .25s ease;
+	  -moz-transition: .25s ease;
+	  -ms-transition: .25s ease;
+	  -o-transition: .25s ease;
+	  transition:  .25s ease;
+  }
+  .wheelOption{
+		margin: 3vh;
+		width: 4vh;
+		height: 4vh;
+		border-radius: 50%;
+  }
+  #wheelOne {
+	  background-color: rgb(0, 0, 0);
+  }
+  #wheelTwo {
+	  background-color: rgb(126, 126, 126);
+  }
+  #wheelThree {
+	  background-color: rgb(122, 0, 0);
+  }
+  #wheelFour {
+	background-color: rgb(255, 174, 0);
+}
+
+  .selectedWheel {
+	margin: 1vh;
+	width: 8vh;
+	height: 8vh;
+  }
+
+  /*Light Picker*/
+#lightPicker {
+	margin-left:auto;
+	margin-right:auto;
+	  width: 10vh;
+	  border-style: solid;
+	  border-width: 0.4vh;
+	  border-color: #2C3E50;
+	background-color:#2C3E50;
+  }
+  #lightPicker div {
+	  display: block;
+		cursor:none;
+		-webkit-transition: .25s ease;
+		-moz-transition: .25s ease;
+		-ms-transition: .25s ease;
+		-o-transition: .25s ease;
+		transition:  .25s ease;
+
+  }
+  .lightOption{
+		margin-left: 2vh;
+		margin-bottom: 2vh;
+		margin-top: 0vh; 
+		width: 6vh;
+		height: 6vh;
+		border-radius: 50%;
+		background-color: rgb(73, 73, 73);
+  }
+
+  .lightOn {
+	background-color: rgb(251, 255, 0);
+  }
+
+

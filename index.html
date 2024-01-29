@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Intinova Labs Car Configurator</title>
+    <!-- Style-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/loading_style.css">
+    <!-- gsap animation-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.0.2/gsap.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"
+        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+    <script src="https://cdn.babylonjs.com/inspector/babylon.inspector.bundle.js"></script>
+    <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+    <script src="https://cdn.babylonjs.com/materialsLibrary/babylonjs.materials.min.js"></script>
+    <script src="https://cdn.babylonjs.com/postProcessesLibrary/babylonjs.postProcess.min.js"></script>
+    <script src="https://cdn.babylonjs.com/gui/babylon.gui.min.js"></script>
+    <script src="https://cdn.babylonjs.com/proceduralTexturesLibrary/babylonjs.proceduralTextures.min.js"></script>
+    <script src="https://cdn.babylonjs.com/serializers/babylonjs.serializers.min.js"></script>
+    <script src="https://cdn.babylonjs.com/cannon.js"></script>
+    <script src="https://code.jquery.com/pep/0.4.3/pep.js"></script>
+</head>
+
+<body>
+    <div id="fpsLabel"></div>
+    <div id="debugLabel">Keyboard Commands: empty</div>
+
+  <!--LOADING ANIMATION-->
+  <div class="ref-align">
+    <img src="assets/ref dots.png">
+  </div>
+  <div id = "customLoadingScreenDiv">
+    <div class="container loading-balls">
+      <img class="logo_load" src="assets/intinovalabs_logo.png">
+    </div>
+    <div class="container loading ">
+      <div class="loading">
+        <div class="loading__letter text-loading">L</div>
+        <div class="loading__letter text-loading">o</div>
+        <div class="loading__letter text-loading">a</div>
+        <div class="loading__letter text-loading">d</div>
+        <div class="loading__letter text-loading">i</div>
+        <div class="loading__letter text-loading">n</div>
+        <div class="loading__letter text-loading">g</div>
+        <div class="loading__letter text-loading">.</div>
+        <div class="loading__letter text-loading">.</div>
+        <div class="loading__letter text-loading">.</div>
+      </div>
+    </div>
+    <div class="container progress">
+      <div class="text-progress">0%</div>
+    </div>
+
+  </div>
+  <!--FINISH LOADING ANIMATION-->
+
+    <img class="logo" src="assets/intinovalabs_onwhite.png" alt="logo missing">
+    <!-- NAV-->
+    <div class="menu-container">
+        <div class="columnOne">
+            <div class="ham boxUI">
+                <div id="ham2" class=''>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+            <div id="menu0_0" class="menu boxUI">
+                <i class="material-icons">wb_iridescent</i>
+            </div>
+            <div id="menu1_3" class="menu boxUI">
+                <i class="material-icons">radio_button_checked</i>
+            </div>
+            <div id="menu2_2" class="menu boxUI">
+                <i class="material-icons">location_city</i>
+            </div>
+            <div id="menu3_5" class="menu boxUI">
+                <i class="material-icons">color_lens</i>
+            </div>
+        </div>
+        <div class="columnTwo">
+            <div class="fake boxUI">
+                <i class="material-icons">b</i>
+            </div>
+            <div id='option0' class="option boxUI">
+            </div>
+            <div id='option1' class="option boxUI">
+            </div>
+            <div id='option2' class="option boxUI">
+            </div>
+            <div id='option3' class="option boxUI">
+            </div>
+            <div id='option4' class="option boxUI">
+            </div>
+            <div id='option5' class="option boxUI">
+            </div>
+        </div>
+
+    </div>
+
+    <canvas id="renderCanvas" touch-action="none"></canvas> //touch-action="none" for best results from PEP
+    <script type="text/javascript" src="js/InputClasses.js"></script>
+    <script type="text/javascript" src="js/InputController.js"></script>
+    <script type="text/javascript" src='js/HelperFunctions.js'></script>
+    <script type="text/javascript" src='js/MeshLoaderCtrl.js'></script>
+    <script type="text/javascript" src='js/MaterialManager.js'></script>
+    <script type="text/javascript" src='js/ColorPicker.js'></script>
+    <script type="text/javascript" src='js/SceneEditor.js'></script>
+    <script type="text/javascript" src='js/AnimationManager.js'></script>
+    <script type="text/javascript" src='js/PostEffects.js'></script>
+    <script type="text/javascript" src='js/index.js'></script>
+
+
+
+</body>
+
+</html>
